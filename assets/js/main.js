@@ -207,7 +207,6 @@ if ('IntersectionObserver' in window) {
 
 // Tự cuộn chậm sau khi mở thiệp. Người xem luôn có thể dừng hoặc bật lại.
 const autoButton = $('#autoScrollBtn');
-const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 const AUTO_SCROLL_SPEED = 24; // pixel/giây; chỉnh số này để thay đổi tốc độ
 let autoRunning = false, autoFrame = 0, autoDelay = 0, lastFrame = 0, autoPosition = 0;
 function updateAutoButton() {
@@ -246,7 +245,7 @@ function startAutoScroll() {
 }
 function scheduleAutoScroll() {
   updateAutoButton();
-  if (!reducedMotion.matches) autoDelay = setTimeout(startAutoScroll, 2000);
+  autoDelay = setTimeout(startAutoScroll, 2000);
 }
 autoButton.addEventListener('click', () => autoRunning ? stopAutoScroll() : startAutoScroll());
 // Không tự cuộn khi khách đang tương tác với nội dung hay chuyển sang tab khác.
@@ -259,7 +258,6 @@ document.addEventListener('keydown', event => {
   if (['ArrowUp', 'ArrowDown', 'PageUp', 'PageDown', 'Home', 'End', ' '].includes(event.key) && (autoRunning || autoDelay)) stopAutoScroll();
 });
 document.addEventListener('visibilitychange', () => { if (document.hidden && (autoRunning || autoDelay)) stopAutoScroll(); });
-if (reducedMotion.addEventListener) reducedMotion.addEventListener('change', e => { if (e.matches && (autoRunning || autoDelay)) stopAutoScroll(); });
 
 // Thông báo nhỏ
 const toast = m => {
