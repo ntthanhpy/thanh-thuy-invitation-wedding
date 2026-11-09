@@ -2,6 +2,8 @@
 
 ## Sử dụng
 
+Website thiệp cưới: [https://ntthanhpy.github.io/thanh-thuy-invitation-wedding/](https://ntthanhpy.github.io/thanh-thuy-invitation-wedding/)
+
 Giữ nguyên cấu trúc thư mục và đưa toàn bộ project lên GitHub Pages. Nếu đang có project, chỉ cần thay `index.html`, `assets/css/style.css` và `assets/js/main.js` bằng các file tương ứng trong bản cập nhật. Xóa cache trình duyệt hoặc tải lại trang nếu chưa thấy thay đổi.
 
 Ngay sau khi nhấn mở thiệp, trang bắt đầu tự cuộn. Nút ở góc trên bên phải cho phép dừng hoặc tiếp tục; thao tác cuộn, chạm vào nội dung, bàn phím hoặc chuyển tab sẽ dừng tự cuộn. Khi cuộn tới ảnh, ảnh sẽ xuất hiện nhẹ; trên máy tính, rê chuột lên ảnh để xem hiệu ứng phóng nhẹ.
