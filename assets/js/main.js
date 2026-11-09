@@ -208,16 +208,14 @@ if ('IntersectionObserver' in window) {
 // Tự cuộn chậm sau khi mở thiệp. Người xem luôn có thể dừng hoặc bật lại.
 const autoButton = $('#autoScrollBtn');
 const AUTO_SCROLL_SPEED = 24; // pixel/giây; chỉnh số này để thay đổi tốc độ
-let autoRunning = false, autoFrame = 0, autoDelay = 0, lastFrame = 0, autoPosition = 0;
+let autoRunning = false, autoFrame = 0, lastFrame = 0, autoPosition = 0;
 function updateAutoButton() {
   autoButton.hidden = false;
   autoButton.textContent = autoRunning ? tr('Ⅱ Dừng tự cuộn', 'Ⅱ Pause auto-scroll') : tr('▶ Tự cuộn', '▶ Auto-scroll');
   autoButton.setAttribute('aria-pressed', String(autoRunning));
 }
 function stopAutoScroll() {
-  clearTimeout(autoDelay);
   cancelAnimationFrame(autoFrame);
-  autoDelay = 0;
   autoRunning = false;
   lastFrame = 0;
   updateAutoButton();
@@ -234,8 +232,6 @@ function autoStep(timestamp) {
   autoFrame = requestAnimationFrame(autoStep);
 }
 function startAutoScroll() {
-  clearTimeout(autoDelay);
-  autoDelay = 0;
   if (autoRunning) return;
   autoRunning = true;
   autoPosition = window.scrollY;
@@ -245,19 +241,19 @@ function startAutoScroll() {
 }
 function scheduleAutoScroll() {
   updateAutoButton();
-  autoDelay = setTimeout(startAutoScroll, 2000);
+  startAutoScroll();
 }
 autoButton.addEventListener('click', () => autoRunning ? stopAutoScroll() : startAutoScroll());
 // Không tự cuộn khi khách đang tương tác với nội dung hay chuyển sang tab khác.
 ['wheel', 'touchstart', 'pointerdown'].forEach(type => window.addEventListener(type, event => {
   if (event.target.closest && event.target.closest('#autoScrollBtn, #curtain')) return;
-  if (autoRunning || autoDelay) stopAutoScroll();
+  if (autoRunning) stopAutoScroll();
 }, { passive: true }));
 document.addEventListener('keydown', event => {
   if (event.target.closest && event.target.closest('#autoScrollBtn')) return;
-  if (['ArrowUp', 'ArrowDown', 'PageUp', 'PageDown', 'Home', 'End', ' '].includes(event.key) && (autoRunning || autoDelay)) stopAutoScroll();
+  if (['ArrowUp', 'ArrowDown', 'PageUp', 'PageDown', 'Home', 'End', ' '].includes(event.key) && autoRunning) stopAutoScroll();
 });
-document.addEventListener('visibilitychange', () => { if (document.hidden && (autoRunning || autoDelay)) stopAutoScroll(); });
+document.addEventListener('visibilitychange', () => { if (document.hidden && autoRunning) stopAutoScroll(); });
 
 // Thông báo nhỏ
 const toast = m => {
@@ -293,4 +289,3 @@ $$('.cp').forEach(b => b.onclick = async () => {
   try { await navigator.clipboard.writeText(b.dataset.c); toast(tr('Đã sao chép số tài khoản', 'Account number copied')); }
   catch (e) { toast(tr('Hãy nhấn giữ để sao chép: ', 'Press and hold to copy: ') + b.dataset.c); }
 });
-
